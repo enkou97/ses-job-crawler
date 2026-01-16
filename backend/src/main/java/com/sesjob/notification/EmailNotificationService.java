@@ -17,12 +17,8 @@ import java.util.List;
 @Slf4j
 public class EmailNotificationService {
 
-    private final JavaMailSender mailSender;
-
     @Autowired(required = false)
-    public EmailNotificationService(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+    private JavaMailSender mailSender;
 
     public boolean sendNewJobsNotification(NotificationSettings settings, List<Job> jobs) {
         if (mailSender == null) {
