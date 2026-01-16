@@ -1,5 +1,5 @@
 """
-SESBoard Crawler - SESBoard専用クローラー
+SESBoard Crawler - SESBoard専用クローラー (快速模式 + 关键字过滤)
 """
 import logging
 import re
@@ -16,7 +16,16 @@ logger = logging.getLogger(__name__)
 
 
 class SESBoardCrawler(BaseCrawler):
-    """SESBoard クローラー"""
+    """SESBoard クローラー (快速模式)"""
+    
+    # 排除关键字列表 - 包含这些词的案件将被跳过
+    EXCLUDE_KEYWORDS = [
+        '日本籍のみ',
+        '日本国籍のみ',
+        '日本人のみ',
+        '日本国籍限定',
+        '日本籍限定',
+    ]
     
     def __init__(self):
         super().__init__()
@@ -43,24 +52,38 @@ class SESBoardCrawler(BaseCrawler):
                 logger.info(f"No more jobs found on page {page}")
                 break
             
-            all_jobs.extend(jobs)
-            logger.info(f"Found {len(jobs)} jobs on page {page}")
+            # 过滤掉排除关键字
+            filtered_jobs = []
+            for job in jobs:
+                if self._should_exclude(job.title):
+                    logger.info(f"Skipping excluded job: {job.title[:40]}...")
+                    continue
+                filtered_jobs.append(job)
+            
+            all_jobs.extend(filtered_jobs)
+            logger.info(f"Found {len(jobs)} jobs, kept {len(filtered_jobs)} after filtering")
             page += 1
         
         return all_jobs
+    
+    def _should_exclude(self, text: str) -> bool:
+        """检查文本是否包含排除关键字"""
+        if not text:
+            return False
+        for keyword in self.EXCLUDE_KEYWORDS:
+            if keyword in text:
+                return True
+        return False
     
     async def _parse_job_list(self, html: str) -> List[JobData]:
         """案件リストをパース"""
         soup = BeautifulSoup(html, 'lxml')
         jobs: List[JobData] = []
         
-        # SESBoardの案件カード要素を探す
-        # ページ構造に基づいて調整が必要
-        job_cards = soup.select('h5')  # タイトルがh5で囲まれている
-        
-        for card in job_cards:
+        # 查找所有h5标题元素（案件标题）
+        for h5 in soup.find_all('h5'):
             try:
-                job = self._parse_job_card(card, soup)
+                job = self._parse_job_card(h5, soup)
                 if job:
                     jobs.append(job)
             except Exception as e:
@@ -74,7 +97,7 @@ class SESBoardCrawler(BaseCrawler):
         try:
             # タイトル
             title = title_elem.get_text(strip=True)
-            if not title:
+            if not title or title == '絞り込み':
                 return None
             
             # 周辺要素から情報を取得
@@ -94,38 +117,43 @@ class SESBoardCrawler(BaseCrawler):
             
             # 詳細ページURLを構築
             if source_id:
-                source_url = f"{self.base_url}/cases/{source_id}"
+                source_url = f"{self.base_url}/cases/show?case={source_id}"
             else:
                 source_url = f"{self.base_url}/cases/list"
             
             # ロケーション
             location = ""
-            location_elem = parent.find(string=lambda x: x and 'エリア' in x)
-            if location_elem:
-                location = location_elem.strip()
+            parent_text = parent.get_text()
+            if '東京' in parent_text:
+                location = "東京エリア"
+            elif '大阪' in parent_text:
+                location = "大阪エリア"
+            elif '名古屋' in parent_text:
+                location = "名古屋エリア"
+            elif '福岡' in parent_text:
+                location = "福岡エリア"
             
             # スキル
-            skills_text = parent.get_text()
-            required_skills = self.extract_skills(skills_text)
+            required_skills = self.extract_skills(parent_text)
             
-            # 説明文
+            # 説明文（必須・尚可の部分を抽出）
             description = ""
-            desc_elem = parent.find('p') or parent.find(class_='description')
-            if desc_elem:
-                description = desc_elem.get_text(strip=True)
-            else:
-                # タイトル以降のテキストを説明として使用
-                description = parent.get_text(strip=True).replace(title, '', 1).strip()
+            if '【必須】' in parent_text:
+                start = parent_text.find('【必須】')
+                end = parent_text.find('【尚可】', start) if '【尚可】' in parent_text else start + 200
+                description = parent_text[start:end].strip()
+            elif '必須' in parent_text:
+                description = parent_text[:300].strip()
             
             # リモートタイプ検出
-            remote_type = self.detect_remote_type(skills_text + " " + description)
+            remote_type = self.detect_remote_type(parent_text)
             
             return JobData(
                 source="SESBoard",
                 source_url=source_url,
                 source_id=source_id,
                 title=title,
-                location=location,
+                location=location if location else "東京エリア",
                 required_skills=required_skills,
                 remote_type=remote_type,
                 description=description[:500] if description else None,
