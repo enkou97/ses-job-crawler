@@ -15,21 +15,11 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: DATABASE_URL
-        fromDatabase:
-          name: ses-job-db
-          property: connectionString
+        sync: false  # Set manually (Neon connection string)
       - key: DATABASE_USERNAME
-        fromDatabase:
-          name: ses-job-db
-          property: user
+        sync: false
       - key: DATABASE_PASSWORD
-        fromDatabase:
-          name: ses-job-db
-          property: password
+        sync: false
 
-databases:
-  - name: ses-job-db
-    plan: free
-    region: singapore
-    databaseName: sesjob
-    user: sesjob
+# Note: Database is hosted on Neon (free tier)
+# Set DATABASE_URL to: jdbc:postgresql://ep-xxx.neon.tech/neondb?sslmode=require
