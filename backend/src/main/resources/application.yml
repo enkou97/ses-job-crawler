@@ -100,6 +100,12 @@ spring:
     activate:
       on-profile: prod
 
+  # Exclude auto-configuration for Redis and Mail
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/sesjob}
     username: ${DATABASE_USERNAME:sesjob}
@@ -115,12 +121,11 @@ spring:
       hibernate:
         format_sql: false
 
-  # Disable Redis in free tier
-  data:
-    redis:
-      enabled: false
-
 logging:
   level:
     com.sesjob: INFO
     org.hibernate.SQL: WARN
+
+# Server port from environment
+server:
+  port: ${PORT:8080}
