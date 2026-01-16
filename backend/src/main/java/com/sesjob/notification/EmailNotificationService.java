@@ -2,8 +2,8 @@ package com.sesjob.notification;
 
 import com.sesjob.entity.Job;
 import com.sesjob.entity.NotificationSettings;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,22 @@ import java.util.List;
  * メール通知サービス
  */
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class EmailNotificationService {
 
     private final JavaMailSender mailSender;
 
+    @Autowired(required = false)
+    public EmailNotificationService(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
     public boolean sendNewJobsNotification(NotificationSettings settings, List<Job> jobs) {
+        if (mailSender == null) {
+            log.warn("Email notification skipped: JavaMailSender is not configured");
+            return false;
+        }
+
         if (!settings.getEmailEnabled() || settings.getEmailAddress() == null) {
             return false;
         }
