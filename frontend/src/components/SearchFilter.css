@@ -1,0 +1,81 @@
+.search-filter {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.search-main {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: var(--space-md);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+}
+
+.search-input {
+    padding-left: 2.5rem;
+}
+
+.search-details {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filter-label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.price-range .input {
+    flex: 1;
+}
+
+.price-separator {
+    color: var(--color-text-muted);
+}
+
+.filter-actions {
+    margin-top: var(--space-lg);
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+    .search-main {
+        flex-wrap: wrap;
+    }
+
+    .search-input-wrapper {
+        width: 100%;
+    }
+}

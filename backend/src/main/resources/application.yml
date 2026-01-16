@@ -1,0 +1,126 @@
+spring:
+  application:
+    name: ses-job-crawler
+
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/sesjob?useSSL=false&serverTimezone=Asia/Tokyo&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+    username: sesjob
+    password: sesjob123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # Mail Configuration (for notifications)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# Server Configuration
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    com.sesjob: DEBUG
+    org.hibernate.SQL: DEBUG
+
+# Crawler Configuration
+crawler:
+  schedule:
+    cron: "0 0 */6 * * *"  # Every 6 hours
+  sources:
+    sesboard:
+      enabled: true
+      base-url: https://sesboard.jp
+    techdirect:
+      enabled: true
+      base-url: https://techdirect.jp
+    freelance-board:
+      enabled: true
+      base-url: https://freelance-board.com
+
+# OpenAPI Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:h2:mem:sesjob;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+
+---
+# Production Profile (Render deployment)
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/sesjob}
+    username: ${DATABASE_USERNAME:sesjob}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: false
+
+  # Disable Redis in free tier
+  data:
+    redis:
+      enabled: false
+
+logging:
+  level:
+    com.sesjob: INFO
+    org.hibernate.SQL: WARN

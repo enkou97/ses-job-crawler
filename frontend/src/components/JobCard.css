@@ -1,0 +1,117 @@
+.job-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.job-card:hover,
+.job-card.hovered {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-lg), 0 0 20px rgba(99, 102, 241, 0.1);
+    transform: translateY(-2px);
+}
+
+.job-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.job-source {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.favorite-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-tertiary);
+    transition: all var(--transition-fast);
+}
+
+.favorite-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-warning);
+    transform: scale(1.1);
+}
+
+.favorite-btn.active {
+    color: var(--color-warning);
+}
+
+.job-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.job-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.job-price {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+}
+
+.price-value {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.job-location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.location-icon {
+    font-size: 0.875rem;
+}
+
+.job-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.job-card-footer {
+    margin-top: auto;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+}
+
+.job-date {
+    display: block;
+}

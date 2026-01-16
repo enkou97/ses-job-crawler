@@ -1,0 +1,223 @@
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--space-lg);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: var(--space-xl);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.modal-title-area {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.modal-actions {
+    display: flex;
+    gap: var(--space-sm);
+}
+
+.modal-actions .btn-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.25rem;
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
+}
+
+.modal-actions .btn-icon:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+
+.modal-actions .favorite-btn.active {
+    color: var(--color-warning);
+}
+
+.modal-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: var(--space-lg);
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+}
+
+.detail-card {
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.detail-card.detail-price {
+    grid-column: span 2;
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.detail-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+}
+
+.detail-value {
+    font-size: var(--text-lg);
+    font-weight: 600;
+}
+
+.detail-price .detail-value {
+    font-size: var(--text-2xl);
+}
+
+.detail-sub {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+}
+
+.detail-section {
+    margin-bottom: var(--space-xl);
+}
+
+.section-title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.skill-block {
+    margin-bottom: var(--space-md);
+}
+
+.skill-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-sm);
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+}
+
+.detail-description {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+}
+
+.detail-meta {
+    text-align: right;
+}
+
+.tag-status-new {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--color-info);
+}
+
+.tag-status-read {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+}
+
+.tag-status-applied {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--color-success);
+}
+
+.tag-status-closed {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--color-error);
+}
+
+@media (max-width: 640px) {
+    .modal-content {
+        padding: var(--space-lg);
+        max-height: 90vh;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-card.detail-price {
+        grid-column: span 1;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}

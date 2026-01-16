@@ -1,0 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+target/
+*.jar
+*.class
+dist/
+build/
+*.egg-info/
+
+# Node modules (for frontend)
+node_modules/
+
+# Docker volumes
+mysql-data/
+redis-data/
