@@ -16,7 +16,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
 
   # Redis Configuration
   data:
@@ -116,9 +115,9 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: false
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
         jdbc:
           lob:
