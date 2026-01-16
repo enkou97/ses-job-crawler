@@ -15,7 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 @Tag(name = "Notifications", description = "通知設定API")
-@CrossOrigin(origins = "*")
 public class NotificationController {
 
     private final NotificationService notificationService;

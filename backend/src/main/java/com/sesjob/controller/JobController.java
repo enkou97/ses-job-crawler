@@ -18,7 +18,6 @@ import java.util.List;
 @RequestMapping("/api/jobs")
 @RequiredArgsConstructor
 @Tag(name = "Jobs", description = "案件管理API")
-@CrossOrigin(origins = "*")
 public class JobController {
 
     private final JobService jobService;
